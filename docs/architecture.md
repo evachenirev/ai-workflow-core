@@ -7,17 +7,17 @@ ai-workflow-core 是一套模組化 AI 多代理系統，目標是將使用者�
 ```mermaid
 flowchart TD
   UI[使用者輸入 (Streamlit UI)]
-  Controller[Workflow Controller<br>(流程調度與代理管理)]
+  Controller[Workflow Controller\\n(流程調度與代理管理)]
   
   subgraph Agents[AI Agents 多代理]
-    PRD[PRD Agent<br>(prd_agent.py)]
-    Research[Research Agent<br>(research_agent.py)]
-    Task[Task Agent<br>(task_agent.py)]
-    KPI[KPI Agent<br>(kpi_agent.py)]
+    PRD[PRD Agent\\n(prd_agent.py)]
+    Research[Research Agent\\n(research_agent.py)]
+    Task[Task Agent\\n(task_agent.py)]
+    KPI[KPI Agent\\n(kpi_agent.py)]
   end
 
-  OutputGen[輸出產生器<br>(helpers.py)]
-  OutputFile[Markdown 輸出檔案<br>(outputs/)]
+  OutputGen[輸出產生器\\n(helpers.py)]
+  OutputFile[Markdown 輸出檔案\\n(outputs/)]
 
   UI --> Controller
   Controller --> PRD
