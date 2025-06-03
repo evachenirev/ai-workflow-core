@@ -123,11 +123,13 @@ pytest tests/test_controller.py -v
 範例測試程式碼：
 
 ```python
-def test_controller_dispatch():
-    input_text = "開發一個協助自由接案者的時間管理 App"
-    result = controller.process(input_text)
-    assert "PRD" in result
-    assert "tasks" in result
+def test_process_input():
+    controller = WorkflowController()
+    user_text = "設計一款智能助理App"
+    files = controller.process_input(user_text)
+    assert len(files) == 4
+    for f in files:
+        assert f.endswith(".md")
 ```
 
 ## 🧰 六、除錯與調整指卜
