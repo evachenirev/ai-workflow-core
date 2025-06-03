@@ -33,6 +33,9 @@ poetry shell
 ## 🧷 二、專案架構概覽（非 README）
 
 ```text
+├── .github/
+│   └── workflows/
+│       └── test.yml
 ├── src/
 │   ├── main.py                 # Streamlit 入口點
 │   ├── agents/                # 各任務代理人
@@ -51,6 +54,7 @@ poetry shell
 ├── docs/
 │   ├── PRD.md
 │   ├── architecture.md
+|   ├── TESTING_GUIDE.md
 │   └── demo_screenshots/
 ```
 
