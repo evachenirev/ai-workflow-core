@@ -1,8 +1,3 @@
-"""
-controller.py
-負責調度各 AI Agent，整合輸入輸出流程
-"""
-
 from agents.prd_agent import PRDAgent
 from agents.research_agent import ResearchAgent
 from agents.task_agent import TaskAgent
@@ -16,28 +11,17 @@ class WorkflowController:
         self.task_agent = TaskAgent()
         self.kpi_agent = KPIAgent()
 
-    def process_input(self, user_text: str):
-        """
-        主流程：
-        1. 呼叫 ResearchAgent 做市場調研
-        2. 呼叫 PRDAgent 產出需求文檔
-        3. 呼叫 TaskAgent 產生任務分解
-        4. 呼叫 KPIAgent 生成 KPI 指標與排程
-        5. 輸出所有 Markdown 文件路徑清單
-        """
+    def process(self, input_text):
+        prd = self.prd_agent.generate_prd(input_text)
+        research = self.research_agent.generate_research(input_text)
+        tasks = self.task_agent.generate_tasks(input_text)
+        kpi = self.kpi_agent.generate_kpi(input_text)
 
-        research_md = self.research_agent.generate_research_report(user_text)
-        prd_md = self.prd_agent.generate_prd(user_text, research_md)
-        tasks_md = self.task_agent.generate_tasks(prd_md)
-        kpi_md = self.kpi_agent.generate_kpi(tasks_md)
-
-        # 儲存所有文件
+        # 輸出為 Markdown 檔案，並回傳檔案路徑清單
         files = []
-        for name, content in zip(
-            ["research", "prd", "tasks", "kpi"],
-            [research_md, prd_md, tasks_md, kpi_md]
-        ):
-            path = save_markdown(name, content)
-            files.append(path)
+        files.append(save_markdown("prd.md", prd))
+        files.append(save_markdown("research.md", research))
+        files.append(save_markdown("tasks.md", tasks))
+        files.append(save_markdown("kpi.md", kpi))
 
         return files

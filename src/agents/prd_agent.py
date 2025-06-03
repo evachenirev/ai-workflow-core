@@ -1,14 +1,15 @@
-"""
-prd_agent.py
-負責生成產品需求文件 (PRD)
-"""
+from utils.llm import OpenRouterClient
 
 class PRDAgent:
-    def __init__(self):
-        # 初始化 AI 模型與參數
-        pass
+    def __init__(self, llm_client=None):
+        self.llm = llm_client or OpenRouterClient()
 
-    def generate_prd(self, user_input: str, research_report: str) -> str:
-        # TODO: 呼叫 LLM，組合 prompt 並取得 PRD Markdown 內容
-        prd_content = f"# 產品需求文件\n\n基於輸入: {user_input}\n\n調研結果摘要:\n{research_report}\n\n..."
-        return prd_content
+    def generate_prd(self, idea_text):
+        prompt = (
+            f"請根據以下產品想法撰寫一份詳細的產品需求文件 (PRD):\n"
+            f"{idea_text}\n"
+            f"請包含目標、功能、使用者需求和預期效益，"
+            f"用條列式清楚表達。"
+        )
+        result = self.llm.chat(prompt)
+        return result
