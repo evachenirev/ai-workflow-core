@@ -30,7 +30,7 @@ poetry shell
 
 ---
 
-## 🧷 二、專案架構概覽（非 README）
+## 🧷 二、專案架構概覽
 
 ```text
 ├── .github/
