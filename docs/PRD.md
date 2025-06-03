@@ -2,91 +2,84 @@
 
 ## 一、產品定位與目標
 
-**AI Workflow Core** 是一套由多代理人（Multi-Agent）驅動的智慧工作流程平台，
-協助使用者將非結構化的初步想法（文字或語音），自動轉化為具結構性的產品文件、技術規劃、KPI 指標與任務拆解。
-系統亦支援整合如 Cursor、Notion、GitHub 等工具，實現產品開發流程的自動化與持續追蹤。
+**AI Workflow Core** 是一套由模組化 AI 代理人構成的智慧工作流程平台，能協助使用者將初步構想（文字輸入）快速轉化為具結構的產品文檔與可執行任務。平台透過不同任務導向的提示詞（Prompt Templates），串接 OpenRouter 支援的語言模型（目前預設為 GPT-4）來完成任務拆解，未來也支援多模型擴充與開發工具整合。
 
 ### 🎯 主要目標客群
-
-* 🚀 初創團隊與產品經理：快速構思產品原型與文件化
-* 🧑‍💻 自由開發者：從想法快速落地執行
-* 🏢 中小企業：協助流程自動化與任務規劃
+- 🚀 **初創團隊與產品經理**：快速構思產品原型並文檔化
+- 🧑‍💻 **自由開發者**：從靈感出發迅速落地任務
+- 🏢 **中小企業**：強化內部流程自動化與 KPI 架構規劃
 
 ## 二、功能模組總覽
 
-| 模組         | 功能說明                                    |
-| ---------- | --------------------------------------- |
-| 💡 想法輸入    | 以文字或語音輸入原始構想，支援多語系（中/英）                 |
-| 📄 PRD 產生器 | 由 PRD Agent 將輸入轉換為產品需求文件（PRD）           |
-| 📊 市場研究器   | 利用 Research Agent 回傳競品、目標市場、Persona 等資料 |
-| ✅ 任務分解器    | Task Agent 產生可執行任務、優先順序與排程建議            |
-| 🎯 KPI 推導器 | KPI Agent 自動產出可衡量的關鍵指標與評估方法             |
-| 📂 輸出管理    | 所有輸出皆以 Markdown 儲存，可導出至外部系統或 Git Repo   |
+| 模組名稱       | 功能說明 |
+|----------------|----------|
+| 💡 想法輸入     | 使用者以文字輸入原始構想（如："我要做一款庫存管理 App"） |
+| 📄 PRD 模組     | 生成產品需求文件（Product Requirement Document） |
+| 📊 調研模組     | 根據輸入主題產生市場競品分析、Persona 等資料 |
+| ✅ 任務模組     | 拆解具體任務，包含優先順序與時程建議 |
+| 🎯 KPI 模組     | 推導關鍵績效指標與評估方式 |
+| 📂 輸出模組     | 將所有模組輸出以 Markdown 儲存，可下載或匯出至其他平台（規劃中） |
 
 ## 三、使用流程（User Flow）
 
-1. 使用者透過 Streamlit 前端輸入想法（例如：「我想開發一個幫助小型店家管理庫存的 App」）
-2. Controller 組件接收輸入，分派給對應的 AI Agent 處理
-3. 各 Agent 串接 GPT-4 / Claude 等 LLM API 進行任務推論
-4. 統整所有產出內容：PRD、競品分析、任務列表、KPI、預估時程
-5. 使用者可編輯並選擇匯出：Notion / GitHub / Cursor
+1. 使用者透過 Streamlit 前端介面輸入想法
+2. Controller 接收並分派輸入至各模組代理人（Agent）
+3. 每個模組使用特定 Prompt 與 LLM（經由 OpenRouter）完成任務
+4. 系統回傳 PRD、競品研究、任務拆解、KPI 建議等結果
+5. 使用者可進行編輯與導出
 
-## 四、技術架構（概要）
+## 四、技術架構概覽
 
-📄 架構圖請參見 `docs/architecture.md`
+📄 詳細架構圖請見 `docs/architecture.md`
 
-### 核心組件
+- **前端介面**：基於 Streamlit，支援基本文字互動與結果展示
+- **模型調度**：使用單一 LLM（GPT-4 via OpenRouter），配合多類任務型 Prompt 實現模擬多代理人架構
+- **模組結構**：各功能模組獨立封裝於 `src/agents/`，便於擴充與測試
+- **快取策略**：目前支援本地儲存與 SQLite 快取（Redis 規劃中）
+- **資料儲存**：所有輸出存於 `/outputs/` 資料夾，依時間戳命名
 
-* **前端介面**：基於 Streamlit 開發，提供語音/文字輸入與輸出展示
-* **LangChain**：用於多代理人調度與工作流程控制
-* **多模型支援**：可搭配 GPT-4、Claude、Gemini 等主流 LLM API
-* **快取策略**：支援 SQLite 本地快取或 Redis 記憶體型快取
-* **模組化結構**：原始碼分為 `src/agents`, `src/utils`, `outputs/` 等目錄
+## 五、產品開發路線（MVP 與後續）
 
-## 五、產品路線與規劃
+| 狀態 | 功能項目 |
+|------|----------|
+| ✅   | PRD、Research、Task、KPI 模組基本功能已完成 |
+| ✅   | 多語言輸入支援（中/英文） |
+| 🔄   | 使用者自定義 Prompt 與模組參數 |
+| 🔄   | 多模型選擇支援（Claude、Gemini 等） |
+| 🔄   | 語音輸入模組（Whisper、Deepgram 研究中） |
+| 🔄   | 匯出整合至 Notion / GitHub / Cursor（API 整合中） |
+| 🔄   | 任務追蹤與甘特圖視覺化呈現 |
 
-| 狀態 | 功能項目                           |
-| -- | ------------------------------ |
-| ✅  | 多語介面支援（目前支援中/英文）               |
-| 🔄 | 團隊協作模式（多人共享輸出文件）               |
-| 🔄 | 使用者自定義 Prompt 模板（個性化 Agent 任務） |
-| 🔄 | 自動推播任務追蹤與時程提醒                  |
+## 六、API 規格（規劃中）
 
-## 六、API 規格（選用）
+| Endpoint              | 方法 | 功能說明 |
+|-----------------------|------|-----------|
+| /generate/prd         | POST | 產出產品需求文檔 |
+| /generate/research    | POST | 市場調研與競品分析 |
+| /generate/tasks       | POST | 任務拆解與排程建議 |
+| /generate/kpis        | POST | KPI 與評估方式生成 |
+| /export               | POST | 結果導出至外部系統（GitHub、Notion、Cursor） |
 
-| API Endpoint         | 方法   | 說明                              |
-| -------------------- | ---- | ------------------------------- |
-| `/generate/prd`      | POST | 根據輸入產生產品需求文件 PRD                |
-| `/generate/research` | POST | 產生市場調查與競品資料                     |
-| `/generate/tasks`    | POST | 自動切分任務與建議時程                     |
-| `/generate/kpis`     | POST | 推導關鍵績效指標                        |
-| `/export`            | POST | 將結果同步至 GitHub / Notion / Cursor |
+## 七、執行環境與安裝方式
 
-## 七、依賴與執行環境
+- **必要條件**：
+  - Python 3.10+
+  - 安裝 OpenRouter API Key（.env）
 
-* 必要 API Key：
-
-  * OpenAI（GPT-4）
-  * Anthropic（Claude）
-
-* 建議執行環境：
-
-  * Python 3.10 以上
-  * 使用虛擬環境管理（如 `venv`）
-
-### 安裝方式
-
+- **安裝方式**：
 ```bash
 pip install -r requirements.txt
 ```
 
 ## 八、補充說明
 
-* 所有產出文件皆儲存於 `outputs/` 資料夾，並自動依時間命名
-* 可自定 Agent Prompt：修改 `src/utils/prompts.py`
-* 可調整調度流程：編輯 `src/controller.py`
+- 所有產出儲存於 `outputs/`，自動依時間命名
+- Prompt 模板可於 `src/utils/prompts.py` 調整
+- 控制流程定義於 `src/controller.py`
+- 專案使用 Poetry 進行版本控管與開發管理
 
-📎 附註：
+📎 範例結果與畫面請見 `docs/demo_screenshots/`
 
-* 若需 Demo 或影片介紹，請見 `docs/demo_screenshots/`
-* 此 PRD 為 MVP 初版，後續版本將持續優化交互體驗與輸出格式
+---
+
+> ⚠️ 本產品仍為 MVP 版本，部分功能仍在開發中，若有合作或建議歡迎聯繫開發者團隊。
