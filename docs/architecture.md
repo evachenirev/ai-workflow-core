@@ -9,7 +9,7 @@ flowchart TD
   UI["使用者輸入<br/>(Streamlit UI)"]
   Controller["Workflow Controller<br/>(流程調度與代理管理)"]
   
-  subgraph Agents["AI Agents 多代理"]
+  subgraph Agents["AI Agents 代理"]
     PRD["PRD Agent<br/>(prd_agent.py)"]
     Research["Research Agent<br/>(research_agent.py)"]
     Task["Task Agent<br/>(task_agent.py)"]
