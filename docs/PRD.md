@@ -1,133 +1,82 @@
-AI Workflow Core 中文產品規格書（PRD）
-
+📝 AI Workflow Core 中文產品規格書（PRD）
 一、產品定位與目標
+AI Workflow Core 是一套由 多代理人（Multi-Agent） 驅動的智慧工作流程平台，協助使用者將非結構化的初步想法（文字或語音），自動轉化為具結構性的產品文件、技術規劃、KPI 指標與任務拆解。系統亦支援整合如 Cursor、Notion、GitHub 等工具，實現產品開發流程的自動化與持續追蹤。
 
-AI Workflow Core 是一款由多代理人（Multi-Agent）驅動的智慧工作流程平台，旨在協助使用者從原始想法（文字或語音）自動轉化為可執行的產品文件、技術規劃、KPI 指標與任務分解，並可整合開發工具（如 Cursor、Notion）進行持續追蹤與迭代。
+主要目標客群：
 
-目標客群包含：
+🚀 初創團隊與產品經理：快速構思產品原型與文件化
 
-初創團隊與產品經理（快速構思原型）
+🧑‍💻 自由開發者：從想法快速落地執行
 
-自由開發者（將想法快速落地）
+🏢 中小企業：協助流程自動化與任務規劃
 
-中小企業（流程自動化與任務規劃）
-
-二、功能模組
-
-功能模組
-
-說明
-
-想法輸入
-
-文字或語音輸入原始構想（支援多語）
-
-PRD 產生器
-
-利用 PRD agent 將想法轉化為產品需求文件（Product Requirement Document）
-
-市場研究器
-
-透過 Research agent 回傳相關競品、目標市場、使用者輪廓等
-
-任務分解器
-
-利用 Task agent 自動切分可執行任務、排定優先順序與建議時程
-
-KPI 推導器
-
-由 KPI agent 自動推導出可衡量之關鍵指標與評估方法
-
-輸出管理
-
-所有輸出以 Markdown 儲存，可匯出至外部系統或 Git Repo
+二、功能模組總覽
+模組	功能說明
+💡 想法輸入	以文字或語音輸入原始構想，支援多語系（中/英）
+📄 PRD 產生器	由 PRD Agent 將輸入轉換為產品需求文件（PRD）
+📊 市場研究器	利用 Research Agent 自動回傳競品、目標市場、Persona 等資料
+✅ 任務分解器	Task Agent 產生可執行任務、優先順序與排程建議
+🎯 KPI 推導器	KPI Agent 自動產出可衡量的關鍵指標與評估方法
+📂 輸出管理	所有輸出皆以 Markdown 儲存，可導出至外部系統或 Git Repo
 
 三、使用流程（User Flow）
+使用者透過 Streamlit 前端輸入想法（如：「我想開發一個幫助小型店家管理庫存的 App」）
 
-使用者開啟平台，輸入想法（如：「我想開發一個幫助小型店家管理庫存的App」）
+Controller 組件接收輸入，分派給對應的 AI Agent 處理
 
-Controller 組件接收輸入並轉交至各代理人（agent）
+各 Agent 串接 GPT-4 / Claude 等 LLM API 進行任務推論
 
-各 agent 串接 LLM API（如 GPT-4, Claude 3）完成特定任務
+統整所有產出內容：PRD、競品分析、任務列表、KPI、預估時程
 
-回傳並統整輸出：包含 PRD、競品分析、任務清單、KPI 與時程建議
-
-使用者可編輯內容，或一鍵導出至 Notion / GitHub / Cursor
+使用者可編輯並選擇匯出：Notion / GitHub / Cursor
 
 四、技術架構（概要）
+📄 架構圖請參見 docs/architecture.md
+主要組件包含：
 
-請參考 docs/architecture.md，主要包含：
+Streamlit 前端介面
 
-Streamlit UI 前端
+LangChain 管理多代理工作流調度
 
-LangChain agent 調度核心
+支援多模型（GPT-4 / Claude / Gemini）
 
-多模型選擇支援（GPT-4 / Claude / Gemini）
+快取策略：SQLite / Redis
 
-輕量快取（SQLite / Redis）
+模組化結構：src/agents、src/utils、outputs/
 
-模組化架構：src/agents, src/utils, outputs/
+五、產品路線與規劃
+狀態	功能項目
+✅	多語介面支援（目前支援中/英文）
+🔄	團隊協作模式（多人共享輸出文件）
+🔄	使用者自定義 Prompt 模板（個性化 Agent 任務）
+🔄	自動推播任務追蹤與時程提醒
 
-五、未來規劃
+六、API 規格（選用）
+API Endpoint	方法	說明
+/generate/prd	POST	根據輸入產生產品需求文件 PRD
+/generate/research	POST	產生市場調查與競品資料
+/generate/tasks	POST	自動切分任務與建議時程
+/generate/kpis	POST	推導關鍵績效指標
+/export	POST	將結果同步至 GitHub / Notion 等
 
-✅ 多語介面支援（目前支援中英）
+七、依賴與執行環境
+必要 API Key：OpenAI（GPT-4）、Anthropic（Claude）
 
-⏳ 團隊協作模式（多人共享輸出文件）
+建議環境：Python 3.10+，使用虛擬環境（venv）管理
 
-⏳ 使用者自定義 Prompt 模板（微調 agent 任務）
+安裝方式：
 
-⏳ 自動推播與任務追蹤提醒
+bash
+複製
+編輯
+pip install -r requirements.txt
+八、補充說明
+所有產出文件皆儲存於 outputs/ 資料夾，並自動依時間命名
 
-六、API 需求（如需擴展）
+可自定 Agent Prompt：修改 src/utils/prompts.py
 
-API
+可調整調度流程：編輯 src/controller.py
 
-方法
-
-描述
-
-/generate/prd
-
-POST
-
-根據 input 產生 PRD
-
-/generate/research
-
-POST
-
-產生市場調查內容
-
-/generate/tasks
-
-POST
-
-自動切分任務
-
-/generate/kpis
-
-POST
-
-自動產生 KPI
-
-/export
-
-POST
-
-將輸出同步到 GitHub / Notion
-
-七、依賴與前置
-
-必要 API KEY：OpenAI, Anthropic
-
-建議作業環境：Python 3.10+，建議使用 venv
-
-安裝指令：pip install -r requirements.txt
-
-八、附註
-
-所有輸出將儲存於 outputs/ 資料夾，自動依時間戳記命名
-
-若需客製化 Agent Prompt，請至 src/utils/prompts.py 編輯
-
-若需調整執行流程，請修改 src/controller.py 調用邏輯
+📎 附註
+若需 Demo 或影片介紹，請見 docs/demo_screenshots/
+此 PRD 為 MVP 初版，後續版本將持續優化交互體驗與輸出格式
