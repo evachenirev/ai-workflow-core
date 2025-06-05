@@ -1,4 +1,4 @@
-# Thoughts to Action
+# AI Workflow Core
 
 A modular AI-powered assistant that transforms your raw ideas into structured, actionable workflows — including PRDs, technical plans, timelines, and KPIs — using a multi-agent architecture. Designed for product managers, developers, and creators who want to go from "thoughts" to execution quickly.
 
